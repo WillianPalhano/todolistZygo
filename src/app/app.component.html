@@ -1,0 +1,10 @@
+<button (click)="createItem()">Criar</button>
+<button (click)="checkItem(true)">Assinalar</button>
+<button (click)="checkItem(false)">Desassinalar</button>
+<button (click)="deleteItem()">Deletar</button>
+
+<div *ngFor="let i of items">
+    <h1>{{ i.order }}</h1>
+    <div>{{ i.completed}}</div>
+    <h1>{{ i.title }}</h1>
+</div>
