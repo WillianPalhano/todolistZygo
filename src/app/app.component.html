@@ -1,10 +1,17 @@
-<button (click)="createItem()">Criar</button>
-<button (click)="checkItem(true)">Assinalar</button>
-<button (click)="checkItem(false)">Desassinalar</button>
-<button (click)="deleteItem()">Deletar</button>
-
-<div *ngFor="let i of items">
-    <h1>{{ i.order }}</h1>
-    <div>{{ i.completed}}</div>
-    <h1>{{ i.title }}</h1>
+<div class="main">
+    <div class="item-list center">
+        <div class="create item">
+            <input type="text" [(ngModel)]="newItem" (keyup.enter)="createItem()" placeholder="Type your task here...">
+        </div>
+        <div *ngFor="let i of items" class="item center">
+            <div *ngIf="i.completed" (click)="checkItem(i)" class="check-box">
+                <img src="../assets/check-box-completed.png" alt="">
+            </div>
+            <div *ngIf="!i.completed" (click)="checkItem(i)" class="check-box">
+                <img src="../assets/check-box-empty.png" alt="">
+            </div>
+            <h1>{{ i.title }}</h1>
+            <button (click)="deleteItem(i)">Deletar</button>
+        </div>
+    </div>
 </div>

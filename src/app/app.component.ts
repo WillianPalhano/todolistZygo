@@ -10,6 +10,7 @@ import { TodolistService } from 'src/services/todolist.service';
 export class AppComponent {
   title = 'todolistZygo';
   items: Item[] = []
+  newItem: string = ""
 
   constructor(
     private todolistService: TodolistService
@@ -20,7 +21,7 @@ export class AppComponent {
   getItems(){
     this.todolistService.getItem().subscribe(res => {      
       this.items = res as Item[]
-      this.items.sort((a ,b) => a.order - b.order)
+      // this.items.sort((a ,b) => a.order - b.order)
       console.log(this.items);
     })
   }
@@ -29,7 +30,7 @@ export class AppComponent {
     let item = {
       completed: false,
       order: this.items.length,
-      title: "Teste"
+      title: this.newItem
     }
     // if(this.items.length == 0){
     //   item.order = 0
@@ -40,20 +41,21 @@ export class AppComponent {
     this.todolistService.setItem(item).subscribe(res => {
       console.log(res);
       this.getItems()
+      this.newItem = ""
     }, err => {
       console.log(err);
     })
   }
 
-  checkItem(flag: boolean){
-      this.todolistService.checkItem(this.items[1].url, flag).subscribe(res =>{
+  checkItem(item: Item){
+      this.todolistService.checkItem(item.url, !item.completed).subscribe(res =>{
         console.log(res);
         this.getItems()
       })
   }
 
-  deleteItem(){
-    this.todolistService.deleteItem(this.items[0].url).subscribe(res =>{
+  deleteItem(item: Item){
+    this.todolistService.deleteItem(item.url).subscribe(res =>{
       console.log(res);
       this.getItems()
     })
