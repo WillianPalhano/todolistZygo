@@ -1,17 +1,70 @@
 <div class="main">
-    <div class="item-list center">
-        <div class="create item">
-            <input type="text" [(ngModel)]="newItem" (keyup.enter)="createItem()" placeholder="Type your task here...">
+    <nav>
+        <ul>
+            <li (click)="changeList(1)">All the tasks</li>
+            <li (click)="changeList(2)">Todo tasks</li>
+            <li (click)="changeList(3)">Done tasks</li>
+        </ul>
+    </nav>
+    <!-- All tasks -->
+    <div class="all-tasks-list center" *ngIf="controlView.allTasks">
+        <h1>All Tasks</h1>
+
+        <div class="create task">
+            <input type="text" [(ngModel)]="newTask" (keyup.enter)="createTask()" placeholder="Type your task here...">
         </div>
-        <div *ngFor="let i of items" class="item center">
-            <div *ngIf="i.completed" (click)="checkItem(i)" class="check-box">
-                <img src="../assets/check-box-completed.png" alt="">
+        <div *ngFor="let i of allTasks" class="task center">
+            <div *ngIf="i.completed" (click)="checkTask(i)" class="check-box">
+                <img src="../assets/check-box-completed.png" alt="Tarefa á fazer">
             </div>
-            <div *ngIf="!i.completed" (click)="checkItem(i)" class="check-box">
-                <img src="../assets/check-box-empty.png" alt="">
+            <div *ngIf="!i.completed" (click)="checkTask(i)" class="check-box">
+                <img src="../assets/check-box-empty.png" alt="Tarefa concluída">
+            </div>
+
+            <h1 *ngIf="!edit" (dblclick)="edit = true">{{ i.title }}</h1>
+            <input *ngIf="edit" type="text" [value]="i.title" [(ngModel)]="i.title" (keyup.enter)="editTask(i)" (focusout)="editTask(i)">
+
+            <img src="../assets/delete.png" alt="Deletar task" (click)="deleteTask(i)">
+        </div>
+    </div>
+
+    <!-- Todo tasks -->
+    <div class="all-tasks-list center" *ngIf="controlView.todoTasks">
+        <h1>Todo Tasks</h1>
+
+        <div class="create task">
+            <input type="text" [(ngModel)]="newTask" (keyup.enter)="createTask()" placeholder="Type your task here...">
+        </div>
+        <div *ngFor="let i of todoTasks" class="task center">
+            <div *ngIf="i.completed" (click)="checkTask(i)" class="check-box">
+                <img src="../assets/check-box-completed.png" alt="Tarefa á fazer">
+            </div>
+            <div *ngIf="!i.completed" (click)="checkTask(i)" class="check-box">
+                <img src="../assets/check-box-empty.png" alt="Tarefa concluída">
+            </div>
+
+            <h1 *ngIf="!edit" (dblclick)="edit = true">{{ i.title }}</h1>
+            <input *ngIf="edit" type="text" [value]="i.title" [(ngModel)]="i.title" (keyup.enter)="editTask(i)" (focusout)="editTask(i)">
+
+            <img src="../assets/delete.png" alt="Deletar task" (click)="deleteTask(i)">
+        </div>
+    </div>
+
+    <!-- Done tasks -->
+    <div class="all-tasks-list center" *ngIf="controlView.doneTasks">
+        <h1>Done Tasks</h1>
+        <div class="create task">
+            <input type="text" [(ngModel)]="newTask" (keyup.enter)="createTask()" placeholder="Type your task here...">
+        </div>
+        <div *ngFor="let i of doneTasks" class="task center">
+            <div *ngIf="i.completed" (click)="checkTask(i)" class="check-box">
+                <img src="../assets/check-box-completed.png" alt="Tarefa á fazer">
+            </div>
+            <div *ngIf="!i.completed" (click)="checkTask(i)" class="check-box">
+                <img src="../assets/check-box-empty.png" alt="Tarefa concluída">
             </div>
             <h1>{{ i.title }}</h1>
-            <button (click)="deleteItem(i)">Deletar</button>
+            <img src="../assets/delete.png" alt="Deletar task" (click)="deleteTask(i)">
         </div>
     </div>
 </div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Item } from 'src/models/item.model';
+import { Task } from 'src/models/task.model';
 
 @Injectable()
 export class TodolistService {
@@ -8,19 +8,19 @@ export class TodolistService {
 
     configUrl = 'https://todo-backend-express.herokuapp.com/';
 
-    getItem() {
+    getTask() {
         return this.http.get(this.configUrl);
     }
 
-    setItem(body: any){
+    setTask(body: any){
         return this.http.post(this.configUrl, body)
     }
 
-    checkItem(url: string, flag: boolean){
-        return this.http.patch(url, {completed: flag})
+    editTask(task: Task){
+        return this.http.patch(task.url, task)
     }
 
-    deleteItem(url: string){
+    deleteTask(url: string){
         return this.http.delete(url)
     }
 }
