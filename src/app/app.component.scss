@@ -6,17 +6,34 @@
         margin: 0 auto;
         background: #f2dc91;
         flex-direction: column;
-        padding-bottom: 40px;
+        padding: 40px 0px;
         box-shadow: #828282 0px 2px 15px;
         >h1{
             font-family: 'Sawarabi Gothic', sans-serif;
             color: #3f3f3f;
             font-size: 32px; 
+            &:nth-last-child(1){
+                font-size: 15px;
+            }
+        }
+        .delete-all{
+            position: absolute;
+            right: 22%;
+            top: 75px;
+            button{
+                font-family: 'Sawarabi Gothic';
+                border: 1px solid;
+                background: #c5c5c5;
+                border-radius: 5px;
+                color: #3f3f3f;
+            }
         }
     }
     nav{
         background: grey;
         height: 40px;
+        position: fixed;
+        width: 100%;
         ul{
             display: flex;
             justify-content: start;
@@ -29,6 +46,10 @@
                 font-family: 'Sawarabi Gothic', sans-serif;
                 color: #3f3f3f;
                 font-size: 22px; 
+                cursor: pointer;
+                &:hover{
+                    color: #d9d9d9;
+                }
             }
         }
     }
@@ -39,6 +60,9 @@
     }
 
     .create{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         input{
             width: 100%;
             border: none;
@@ -65,6 +89,7 @@
             font-size: 20px;
             font-weight: bold;
             word-break: break-word;
+            cursor: pointer;
         }
         input{
             border: none;
@@ -77,6 +102,7 @@
             width: 50%;
             min-width: 30px;
             max-width: 40px;
+            cursor: pointer;
             &:nth-last-child(1){
                 position: absolute;
                 right: 22%;
@@ -85,17 +111,56 @@
     }
 }
 
-@media (max-width: 510px){
-    li{
-        font-size: 14px !important;
-        padding: 0px 15px 0px 0px !important;
+.displayMsg{
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: #fff;
+    box-shadow: #828282 0px 2px 15px;
+    border-radius: 15px;
+    animation: fadeOut 2.5s;
+
+    h1{
+        font-size: 20px;
+        font-family: 'Sawarabi Gothic';
+        padding: 20px 30px;
+        margin: 0;
     }
-    .create{
-        input{
-            font-size: 20px !important;
+    @keyframes fadeOut {
+        0% { opacity: 1;}
+        90% { opacity: 0.9;}
+        100% { opacity: 0;}
+    }
+}
+
+@media (max-width: 510px){
+    .main{
+        nav{
+            ul{
+                li{
+                    font-size: 14px;
+                    padding: 0px 15px 0px 0px;
+                }
+            }
+        }
+        .create{
+            input{
+                font-size: 20px;
+            }
+        }
+        .all-tasks-list{
+            width: 85%;
+            .delete-all{
+                position: relative;
+                right: initial;
+                top: initial;
+            }
         }
     }
-    .all-tasks-list{
-        width: 85% !important;
+    .displayMsg{
+        h1{
+            font-size: 15px;
+            padding: 10px 15px;
+        }
     }
 }

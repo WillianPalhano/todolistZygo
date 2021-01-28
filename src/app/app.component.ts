@@ -8,19 +8,27 @@ import { TodolistService } from 'src/services/todolist.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'todolistZygo';
+  title = 'Todo List';
   allTasks: Task[] = []
   todoTasks: Task[] = []
   doneTasks: Task[] = []
 
+  //Control the list in the view
   controlView = {
     allTasks: true,
     todoTasks: false,
     doneTasks: false
   }
+
+  //Variables
   newTask: string = ""
   edit = false
+  editTitle = ""
   opened: boolean = false
+
+  //Display message
+  display: boolean = false
+  msg: string = ""
 
   constructor(
     private todolistService: TodolistService
@@ -48,13 +56,12 @@ export class AppComponent {
     this.todolistService.getTask().subscribe(res => {      
       this.allTasks = res as Task[]
       this.saveTasks()
-      console.log(this.allTasks);
+    }, err => {
+      this.displayMessage( err)
     })
   }
   
   saveTasks(){
-    console.log("Entrou aqui");
-    
     this.doneTasks = []
     this.todoTasks = []
     this.allTasks.forEach(task => {
@@ -64,15 +71,16 @@ export class AppComponent {
         this.todoTasks.push(task)
       }
     });
-    console.log("Todas aqui: ", this.allTasks);
-    console.log("todo aqui: ", this.todoTasks);
-    console.log("done aqui: ", this.doneTasks);
     localStorage.setItem("allTasks", JSON.stringify(this.allTasks))
     localStorage.setItem("todoTasks", JSON.stringify(this.todoTasks))
     localStorage.setItem("doneTasks", JSON.stringify(this.doneTasks))
   }
 
   createTask(){
+    if(this.newTask == ""){
+      this.displayMessage( "Please, insert a title to your task.")
+      return
+    }
     let item = {
       completed: false,
       order: this.allTasks.length,
@@ -83,21 +91,27 @@ export class AppComponent {
     this.saveTasks()
 
     this.todolistService.setTask(item).subscribe(res => {
-      console.log(res);
       this.getTasks()
       this.newTask = ""
     }, err => {
-      console.log(err);
+      this.displayMessage( err)
     })
   }
 
   editTask(item: Task){
+    if(this.editTitle == item.title){
+      //The title doesn't change
+      this.editTitle = ""
+      this.edit = false
+      return
+    }
     let index = this.allTasks.indexOf(item)
     this.todolistService.editTask(item).subscribe(res =>{
-      console.log(res);
       this.allTasks[index] = res as Task
       this.saveTasks()
       this.getTasks()
+    }, err => {
+      this.displayMessage( err)
     })
     this.edit = false
   }
@@ -106,10 +120,11 @@ export class AppComponent {
     let index = this.allTasks.indexOf(item)
     item.completed = !item.completed
     this.todolistService.editTask(item).subscribe(res =>{
-      console.log(res);
       this.allTasks[index] = res as Task
       this.saveTasks()
       this.getTasks()
+    }, err => {
+      this.displayMessage( err)
     })
   }
 
@@ -118,8 +133,35 @@ export class AppComponent {
     this.allTasks.splice(index, 1)
     this.saveTasks()
     this.todolistService.deleteTask(item.url).subscribe(res =>{
-      console.log(res);
       this.getTasks()
+    }, err => {
+      this.displayMessage( err)
     })
+  }
+
+  async deleteAllTasks(){
+    let urlDelete = []
+
+    for (let i = 0; i < this.doneTasks.length; i++) {
+      urlDelete.push(this.doneTasks[i].url)
+    }
+    this.displayMessage("Carregando...")
+    this.todolistService.deleteAllTasks(urlDelete).subscribe(res =>{
+      console.log(res);
+      this.displayMessage("Finalizado!")
+      this.getTasks()
+    }, err => {
+      this.displayMessage(err)
+    })
+  }
+
+  displayMessage(text: string){
+    this.display = true
+    this.msg = text
+
+    setTimeout(() => {
+      this.display = false
+      this.msg = ""
+    }, 2500);
   }
 }

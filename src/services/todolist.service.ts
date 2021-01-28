@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Task } from 'src/models/task.model';
+import { from, Observable, of } from 'rxjs';
+import { concatMap, toArray, switchMapTo} from 'rxjs/operators';
 
 @Injectable()
 export class TodolistService {
@@ -22,6 +24,14 @@ export class TodolistService {
 
     deleteTask(url: string){
         return this.http.delete(url)
+    }
+
+    deleteAllTasks(urls: Array<string>){
+        return from(urls)
+        .pipe(
+            concatMap(r=> this.http.delete(r)),
+            toArray()
+        )
     }
 }
 
